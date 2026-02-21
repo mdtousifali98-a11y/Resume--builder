@@ -2,140 +2,161 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Professional Resume Builder</title>
+<title>Ultimate Resume Builder</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 
 <style>
-
+*{box-sizing:border-box}
 body{
-    margin:0;
-    font-family:Arial, sans-serif;
-    background:#f2f2f2;
+margin:0;
+font-family: 'Segoe UI', sans-serif;
+background:linear-gradient(135deg,#1f1f1f,#2c3e50);
+color:#333;
 }
 
-.wrapper{
-    display:flex;
-    flex-wrap:wrap;
+.container{
+display:flex;
+flex-wrap:wrap;
 }
 
-.form-section{
-    flex:1;
-    padding:20px;
-    min-width:300px;
-    background:white;
+.form-area{
+flex:1;
+min-width:320px;
+background:#ffffff;
+padding:25px;
+overflow:auto;
+height:100vh;
 }
 
-.preview-section{
-    flex:1;
-    padding:20px;
-    min-width:300px;
+.preview-area{
+flex:1;
+min-width:320px;
+padding:25px;
+overflow:auto;
+height:100vh;
+}
+
+h2{
+margin-top:0;
 }
 
 input, textarea, select{
-    width:100%;
-    padding:8px;
-    margin-bottom:10px;
+width:100%;
+padding:10px;
+margin-bottom:12px;
+border:1px solid #ccc;
+border-radius:5px;
 }
 
 button{
-    padding:10px;
-    background:black;
-    color:white;
-    border:none;
-    cursor:pointer;
+padding:10px;
+border:none;
+margin-top:5px;
+cursor:pointer;
+border-radius:5px;
+}
+
+.generate{
+background:#000;
+color:#fff;
+}
+
+.download{
+background:#27ae60;
+color:#fff;
 }
 
 .resume{
-    width:794px;
-    min-height:1123px;
-    background:white;
-    padding:40px;
-    margin:auto;
+width:794px;
+min-height:1123px;
+background:#fff;
+margin:auto;
+padding:40px;
+box-shadow:0 0 20px rgba(0,0,0,0.3);
 }
 
 .header{
-    display:flex;
-    align-items:center;
+display:flex;
+align-items:center;
+border-bottom:2px solid #000;
+padding-bottom:15px;
 }
 
 .photo{
-    width:120px;
-    height:120px;
-    border-radius:50%;
-    object-fit:cover;
-    border:2px solid black;
+width:130px;
+height:130px;
+border-radius:50%;
+object-fit:cover;
+border:3px solid #000;
 }
 
 .info{
-    margin-left:20px;
+margin-left:20px;
 }
 
 .section{
-    margin-top:20px;
+margin-top:20px;
 }
 
-.template1{
-    border-left:10px solid black;
+.section h3{
+border-bottom:1px solid #000;
+padding-bottom:5px;
+margin-bottom:10px;
 }
 
-.template2{
-    border-left:10px solid darkblue;
-}
-
-.template3{
-    border-left:10px solid darkgreen;
-}
+.template-black{border-left:12px solid #000}
+.template-blue{border-left:12px solid #2980b9}
+.template-green{border-left:12px solid #27ae60}
+.template-red{border-left:12px solid #c0392b}
 
 @media(max-width:1000px){
-    .resume{
-        width:100%;
-    }
+.resume{width:100%}
+.form-area,.preview-area{height:auto}
 }
-
 </style>
 </head>
 
 <body>
 
-<div class="wrapper">
+<div class="container">
 
-<div class="form-section">
+<div class="form-area">
+<h2>Professional Resume Builder</h2>
 
-<h2>Fill Your Details</h2>
+<input type="text" id="name" placeholder="Full Name">
+<input type="text" id="email" placeholder="Email">
+<input type="text" id="phone" placeholder="Phone">
+<textarea id="address" placeholder="Address"></textarea>
 
-<input type="text" placeholder="Full Name" id="name">
-<input type="text" placeholder="Email" id="email">
-<input type="text" placeholder="Phone" id="phone">
-<textarea placeholder="Address" id="address"></textarea>
+<textarea id="objective" placeholder="Career Objective"></textarea>
+<textarea id="education" placeholder="Education (Separate by line)"></textarea>
+<textarea id="skills" placeholder="Skills (comma separated)"></textarea>
+<textarea id="experience" placeholder="Experience (Separate by line)"></textarea>
 
-<textarea placeholder="Career Objective" id="objective"></textarea>
-<textarea placeholder="Education Details" id="education"></textarea>
-<textarea placeholder="Skills (comma separated)" id="skills"></textarea>
-<textarea placeholder="Experience" id="experience"></textarea>
+<label>Upload Photo</label>
+<input type="file" id="photoInput" accept="image/*">
 
-<label>Upload Photo:</label>
-<input type="file" accept="image/*" id="photoInput">
-
-<label>Select Template:</label>
+<label>Select Template</label>
 <select id="template">
-    <option value="template1">Black</option>
-    <option value="template2">Blue</option>
-    <option value="template3">Green</option>
+<option value="template-black">Black</option>
+<option value="template-blue">Blue</option>
+<option value="template-green">Green</option>
+<option value="template-red">Red</option>
 </select>
 
-<button onclick="generateResume()">Generate Resume</button>
-<button onclick="downloadPDF()">Download PDF</button>
+<button class="generate" onclick="generateResume()">Generate Resume</button>
+<button class="download" onclick="downloadPDF()">Download PDF</button>
 
 </div>
 
-<div class="preview-section">
+<div class="preview-area">
 
-<div id="resumePreview" class="resume template1">
+<div id="resumePreview" class="resume template-black">
 
 <div class="header">
-<img id="previewPhoto" class="photo" src="">
+<img id="previewPhoto" class="photo">
 <div class="info">
 <h1 id="previewName"></h1>
 <p id="previewEmail"></p>
@@ -145,76 +166,89 @@ button{
 </div>
 
 <div class="section">
-<h2>Career Objective</h2>
+<h3>Career Objective</h3>
 <p id="previewObjective"></p>
 </div>
 
 <div class="section">
-<h2>Education</h2>
-<p id="previewEducation"></p>
+<h3>Education</h3>
+<ul id="previewEducation"></ul>
 </div>
 
 <div class="section">
-<h2>Skills</h2>
-<p id="previewSkills"></p>
+<h3>Skills</h3>
+<ul id="previewSkills"></ul>
 </div>
 
 <div class="section">
-<h2>Experience</h2>
-<p id="previewExperience"></p>
+<h3>Experience</h3>
+<ul id="previewExperience"></ul>
 </div>
 
 </div>
 
 </div>
-
 </div>
 
 <script>
 
 function generateResume(){
 
-document.getElementById("previewName").innerText =
-document.getElementById("name").value;
+document.getElementById("previewName").innerText=name.value;
+document.getElementById("previewEmail").innerText="Email: "+email.value;
+document.getElementById("previewPhone").innerText="Phone: "+phone.value;
+document.getElementById("previewAddress").innerText=address.value;
+document.getElementById("previewObjective").innerText=objective.value;
 
-document.getElementById("previewEmail").innerText =
-"Email: " + document.getElementById("email").value;
+let eduList=document.getElementById("previewEducation");
+eduList.innerHTML="";
+education.value.split("\n").forEach(item=>{
+if(item.trim()!=""){
+let li=document.createElement("li");
+li.innerText=item;
+eduList.appendChild(li);
+}
+});
 
-document.getElementById("previewPhone").innerText =
-"Phone: " + document.getElementById("phone").value;
+let skillList=document.getElementById("previewSkills");
+skillList.innerHTML="";
+skills.value.split(",").forEach(item=>{
+if(item.trim()!=""){
+let li=document.createElement("li");
+li.innerText=item;
+skillList.appendChild(li);
+}
+});
 
-document.getElementById("previewAddress").innerText =
-document.getElementById("address").value;
+let expList=document.getElementById("previewExperience");
+expList.innerHTML="";
+experience.value.split("\n").forEach(item=>{
+if(item.trim()!=""){
+let li=document.createElement("li");
+li.innerText=item;
+expList.appendChild(li);
+}
+});
 
-document.getElementById("previewObjective").innerText =
-document.getElementById("objective").value;
-
-document.getElementById("previewEducation").innerText =
-document.getElementById("education").value;
-
-document.getElementById("previewSkills").innerText =
-document.getElementById("skills").value;
-
-document.getElementById("previewExperience").innerText =
-document.getElementById("experience").value;
-
-let template = document.getElementById("template").value;
-let resume = document.getElementById("resumePreview");
-resume.className = "resume " + template;
-
+resumePreview.className="resume "+template.value;
 }
 
-document.getElementById("photoInput").addEventListener("change", function(e){
-let reader = new FileReader();
-reader.onload = function(){
-document.getElementById("previewPhoto").src = reader.result;
+photoInput.addEventListener("change",function(e){
+let reader=new FileReader();
+reader.onload=function(){
+previewPhoto.src=reader.result;
 }
 reader.readAsDataURL(e.target.files[0]);
 });
 
 function downloadPDF(){
-let element = document.getElementById("resumePreview");
-html2pdf().from(element).save();
+html2pdf().from(resumePreview).set({
+margin:0,
+filename:'resume.pdf',
+image:{type:'jpeg',quality:1},
+html2canvas:{scale:2},
+jsPDF:{unit:'px',format:[794,1123]}
+}).save();
 }
 
 </script>
