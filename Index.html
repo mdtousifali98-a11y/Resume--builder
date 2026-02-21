@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Professional Resume Builder</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
+<style>
+
+body{
+    margin:0;
+    font-family:Arial, sans-serif;
+    background:#f2f2f2;
+}
+
+.wrapper{
+    display:flex;
+    flex-wrap:wrap;
+}
+
+.form-section{
+    flex:1;
+    padding:20px;
+    min-width:300px;
+    background:white;
+}
+
+.preview-section{
+    flex:1;
+    padding:20px;
+    min-width:300px;
+}
+
+input, textarea, select{
+    width:100%;
+    padding:8px;
+    margin-bottom:10px;
+}
+
+button{
+    padding:10px;
+    background:black;
+    color:white;
+    border:none;
+    cursor:pointer;
+}
+
+.resume{
+    width:794px;
+    min-height:1123px;
+    background:white;
+    padding:40px;
+    margin:auto;
+}
+
+.header{
+    display:flex;
+    align-items:center;
+}
+
+.photo{
+    width:120px;
+    height:120px;
+    border-radius:50%;
+    object-fit:cover;
+    border:2px solid black;
+}
+
+.info{
+    margin-left:20px;
+}
+
+.section{
+    margin-top:20px;
+}
+
+.template1{
+    border-left:10px solid black;
+}
+
+.template2{
+    border-left:10px solid darkblue;
+}
+
+.template3{
+    border-left:10px solid darkgreen;
+}
+
+@media(max-width:1000px){
+    .resume{
+        width:100%;
+    }
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="wrapper">
+
+<div class="form-section">
+
+<h2>Fill Your Details</h2>
+
+<input type="text" placeholder="Full Name" id="name">
+<input type="text" placeholder="Email" id="email">
+<input type="text" placeholder="Phone" id="phone">
+<textarea placeholder="Address" id="address"></textarea>
+
+<textarea placeholder="Career Objective" id="objective"></textarea>
+<textarea placeholder="Education Details" id="education"></textarea>
+<textarea placeholder="Skills (comma separated)" id="skills"></textarea>
+<textarea placeholder="Experience" id="experience"></textarea>
+
+<label>Upload Photo:</label>
+<input type="file" accept="image/*" id="photoInput">
+
+<label>Select Template:</label>
+<select id="template">
+    <option value="template1">Black</option>
+    <option value="template2">Blue</option>
+    <option value="template3">Green</option>
+</select>
+
+<button onclick="generateResume()">Generate Resume</button>
+<button onclick="downloadPDF()">Download PDF</button>
+
+</div>
+
+<div class="preview-section">
+
+<div id="resumePreview" class="resume template1">
+
+<div class="header">
+<img id="previewPhoto" class="photo" src="">
+<div class="info">
+<h1 id="previewName"></h1>
+<p id="previewEmail"></p>
+<p id="previewPhone"></p>
+<p id="previewAddress"></p>
+</div>
+</div>
+
+<div class="section">
+<h2>Career Objective</h2>
+<p id="previewObjective"></p>
+</div>
+
+<div class="section">
+<h2>Education</h2>
+<p id="previewEducation"></p>
+</div>
+
+<div class="section">
+<h2>Skills</h2>
+<p id="previewSkills"></p>
+</div>
+
+<div class="section">
+<h2>Experience</h2>
+<p id="previewExperience"></p>
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<script>
+
+function generateResume(){
+
+document.getElementById("previewName").innerText =
+document.getElementById("name").value;
+
+document.getElementById("previewEmail").innerText =
+"Email: " + document.getElementById("email").value;
+
+document.getElementById("previewPhone").innerText =
+"Phone: " + document.getElementById("phone").value;
+
+document.getElementById("previewAddress").innerText =
+document.getElementById("address").value;
+
+document.getElementById("previewObjective").innerText =
+document.getElementById("objective").value;
+
+document.getElementById("previewEducation").innerText =
+document.getElementById("education").value;
+
+document.getElementById("previewSkills").innerText =
+document.getElementById("skills").value;
+
+document.getElementById("previewExperience").innerText =
+document.getElementById("experience").value;
+
+let template = document.getElementById("template").value;
+let resume = document.getElementById("resumePreview");
+resume.className = "resume " + template;
+
+}
+
+document.getElementById("photoInput").addEventListener("change", function(e){
+let reader = new FileReader();
+reader.onload = function(){
+document.getElementById("previewPhoto").src = reader.result;
+}
+reader.readAsDataURL(e.target.files[0]);
+});
+
+function downloadPDF(){
+let element = document.getElementById("resumePreview");
+html2pdf().from(element).save();
+}
+
+</script>
+
+</body>
+</html>
